@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom'
 import { Bell, Search } from 'lucide-react'
+import type { AdminUser } from '../../services/auth'
 
 const titleMap: Record<string, { title: string; subtitle: string }> = {
   '/':             { title: '개요',      subtitle: '영주 관광 DRT 전체 현황' },
@@ -9,7 +10,11 @@ const titleMap: Record<string, { title: string; subtitle: string }> = {
   '/settings':     { title: '운영 설정', subtitle: '배차 및 노선 운영 파라미터' },
 }
 
-export default function Header() {
+type HeaderProps = {
+  user: AdminUser
+}
+
+export default function Header({ user }: HeaderProps) {
   const { pathname } = useLocation()
   const info = titleMap[pathname] ?? { title: '개요', subtitle: '' }
   const today = new Date().toLocaleDateString('ko-KR', {
@@ -25,16 +30,23 @@ export default function Header() {
 
       <div className="flex items-center gap-4">
         {/* Search */}
-        <div className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2 text-sm text-gray-400">
+        <label className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2 text-sm text-gray-400 focus-within:ring-2 focus-within:ring-menthe/20">
           <Search size={14} />
-          <span className="hidden lg:inline">검색</span>
-        </div>
+          <input
+            className="hidden lg:block bg-transparent outline-none w-28 text-xs text-gray-600 placeholder:text-gray-400"
+            placeholder="검색"
+          />
+        </label>
 
         {/* Date */}
         <span className="text-xs text-gray-400 hidden xl:block">{today}</span>
 
         {/* Notification */}
-        <button className="relative w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition">
+        <button
+          type="button"
+          className="relative w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition"
+          aria-label="알림"
+        >
           <Bell size={16} className="text-gray-500" />
           <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-menthe" />
         </button>
@@ -42,7 +54,7 @@ export default function Header() {
         {/* Avatar */}
         <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
           style={{ background: 'linear-gradient(135deg, #35C8B4, #A4CF4A)' }}>
-          관
+          {user.name.slice(0, 1)}
         </div>
       </div>
     </header>

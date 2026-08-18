@@ -7,9 +7,9 @@ import MonthlySeasonChart from '../components/charts/MonthlySeasonChart'
 import RegionHeatmap from '../components/charts/RegionHeatmap'
 import ForecastChart from '../components/charts/ForecastChart'
 import ReservationTable from '../components/tables/ReservationTable'
-import { kpiData } from '../data/mockData'
+import { kpiData, reservationData, type Reservation } from '../data/mockData'
 
-export default function Overview() {
+export default function Overview({ reservations = reservationData }: { reservations?: Reservation[] }) {
   return (
     <div className="p-6 space-y-5">
       {/* KPI Row */}
@@ -115,7 +115,7 @@ export default function Overview() {
             전체 보기 <ArrowRight size={13} />
           </Link>
         </div>
-        <ReservationTable limit={5} showFilter={false} />
+        <ReservationTable limit={5} showFilter={false} data={reservations} />
       </div>
     </div>
   )

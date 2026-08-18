@@ -6,7 +6,9 @@ import {
   Map,
   Settings,
   Bus,
+  LogOut,
 } from 'lucide-react'
+import type { AdminUser } from '../../services/auth'
 
 const navItems = [
   { to: '/',             icon: LayoutDashboard, label: '개요' },
@@ -16,7 +18,12 @@ const navItems = [
   { to: '/settings',     icon: Settings,        label: '운영 설정' },
 ]
 
-export default function Sidebar() {
+type SidebarProps = {
+  user: AdminUser
+  onLogout: () => void
+}
+
+export default function Sidebar({ user, onLogout }: SidebarProps) {
   return (
     <aside className="w-60 flex-shrink-0 flex flex-col h-full"
       style={{ background: 'linear-gradient(160deg, #35C8B4 0%, #2aaa99 100%)' }}>
@@ -64,12 +71,20 @@ export default function Sidebar() {
       <div className="px-5 py-5 border-t border-white/20">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white text-xs font-bold">
-            관
+            {user.name.slice(0, 1)}
           </div>
-          <div>
-            <p className="text-white text-xs font-semibold">관리자</p>
-            <p className="text-white/50 text-xs">영주시청 교통과</p>
+          <div className="min-w-0 flex-1">
+            <p className="text-white text-xs font-semibold truncate">{user.name}</p>
+            <p className="text-white/50 text-xs truncate">{user.department}</p>
           </div>
+          <button
+            type="button"
+            onClick={onLogout}
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-white/70 hover:text-white hover:bg-white/15 transition"
+            aria-label="로그아웃"
+          >
+            <LogOut size={16} />
+          </button>
         </div>
       </div>
     </aside>

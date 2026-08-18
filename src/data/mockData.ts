@@ -1,3 +1,5 @@
+import internalData from './drtInternalData.json'
+
 // 시간대별 수요 (inbound: 역→관광지, outbound: 관광지→역)
 export const hourlyDemandData = [
   { hour: '06시', 영주역: 5,  풍기역: 3,  outbound: 2  },
@@ -72,37 +74,33 @@ export interface Reservation {
   status: ReservationStatus
 }
 
-export const reservationData: Reservation[] = [
-  { id: 'R240001', date: '2024-05-03', time: '09:20', departure: '영주역', destination: '소수서원', passengers: 3, status: '완료' },
-  { id: 'R240002', date: '2024-05-03', time: '10:05', departure: '영주역', destination: '부석사',   passengers: 2, status: '완료' },
-  { id: 'R240003', date: '2024-05-03', time: '10:30', departure: '풍기역', destination: '소수서원', passengers: 4, status: '완료' },
-  { id: 'R240004', date: '2024-05-03', time: '11:15', departure: '영주역', destination: '무섬마을', passengers: 2, status: '운행중' },
-  { id: 'R240005', date: '2024-05-03', time: '11:40', departure: '풍기역', destination: '부석사',   passengers: 3, status: '운행중' },
-  { id: 'R240006', date: '2024-05-03', time: '13:00', departure: '영주역', destination: '소수서원', passengers: 2, status: '예약' },
-  { id: 'R240007', date: '2024-05-03', time: '13:30', departure: '풍기역', destination: '무섬마을', passengers: 1, status: '예약' },
-  { id: 'R240008', date: '2024-05-03', time: '14:00', departure: '영주역', destination: '부석사',   passengers: 4, status: '예약' },
-  { id: 'R240009', date: '2024-05-03', time: '14:30', departure: '풍기역', destination: '소수서원', passengers: 2, status: '대기' },
-  { id: 'R240010', date: '2024-05-03', time: '15:00', departure: '영주역', destination: '무섬마을', passengers: 3, status: '대기' },
-  { id: 'R240011', date: '2024-05-02', time: '08:45', departure: '영주역', destination: '소수서원', passengers: 2, status: '완료' },
-  { id: 'R240012', date: '2024-05-02', time: '09:10', departure: '풍기역', destination: '부석사',   passengers: 4, status: '완료' },
-  { id: 'R240013', date: '2024-05-02', time: '10:20', departure: '영주역', destination: '부석사',   passengers: 3, status: '완료' },
-  { id: 'R240014', date: '2024-05-02', time: '11:00', departure: '풍기역', destination: '무섬마을', passengers: 2, status: '완료' },
-  { id: 'R240015', date: '2024-05-02', time: '15:30', departure: '영주역', destination: '소수서원', passengers: 2, status: '취소' },
-  { id: 'R240016', date: '2024-05-01', time: '09:00', departure: '영주역', destination: '부석사',   passengers: 5, status: '완료' },
-  { id: 'R240017', date: '2024-05-01', time: '10:15', departure: '풍기역', destination: '소수서원', passengers: 3, status: '완료' },
-  { id: 'R240018', date: '2024-05-01', time: '11:30', departure: '영주역', destination: '무섬마을', passengers: 2, status: '완료' },
-  { id: 'R240019', date: '2024-05-01', time: '14:00', departure: '풍기역', destination: '부석사',   passengers: 4, status: '완료' },
-  { id: 'R240020', date: '2024-05-01', time: '16:00', departure: '영주역', destination: '소수서원', passengers: 1, status: '취소' },
-]
+export const reservationData: Reservation[] = internalData.reservations_mock.map((r) => {
+  const [date, time] = r.reserved_at.split(' ')
+  return {
+    id: r.reservation_id,
+    date,
+    time,
+    departure: r.departure,
+    destination: r.destination,
+    passengers: Number(r.passengers),
+    status: r.status as ReservationStatus,
+  }
+})
+
+const completedPassengers = internalData.reservations_mock
+  .filter((r) => r.status === '완료' || r.status === '운행중')
+  .reduce((sum, r) => sum + Number(r.passengers), 0)
+const activeVehicles = internalData.vehicles.filter((v) => v.status === '운행중').length
+const totalCapacity = internalData.vehicles.reduce((sum, v) => sum + Number(v.capacity), 0)
 
 // KPI 요약
 export const kpiData = {
-  todayRides: 247,
+  todayRides: completedPassengers,
   todayRidesDelta: 12.5,
-  occupancyRate: 82.3,
+  occupancyRate: Math.round((completedPassengers / Math.max(totalCapacity * 4, 1)) * 1000) / 10,
   occupancyDelta: 3.2,
-  activeVehicles: 8,
-  totalVehicles: 12,
-  monthlyTotal: 2350,
+  activeVehicles,
+  totalVehicles: internalData.vehicles.length,
+  monthlyTotal: internalData.reservations_mock.reduce((sum, r) => sum + Number(r.passengers), 0),
   monthlyDelta: 8.7,
 }
