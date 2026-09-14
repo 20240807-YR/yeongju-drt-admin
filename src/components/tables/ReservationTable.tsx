@@ -17,9 +17,10 @@ type SortDir = 'asc' | 'desc' | null
 interface Props {
   limit?: number
   showFilter?: boolean
+  data?: Reservation[]
 }
 
-export default function ReservationTable({ limit, showFilter = true }: Props) {
+export default function ReservationTable({ limit, showFilter = true, data = reservationData }: Props) {
   const [filter, setFilter] = useState<string>('전체')
   const [search, setSearch] = useState('')
   const [sortKey, setSortKey] = useState<SortKey>('date')
@@ -29,7 +30,7 @@ export default function ReservationTable({ limit, showFilter = true }: Props) {
 
   const statuses: string[] = ['전체', '예약', '운행중', '완료', '대기', '취소']
 
-  const filtered = reservationData
+  const filtered = data
     .filter((r) => filter === '전체' || r.status === filter)
     .filter((r) =>
       search === '' ||
