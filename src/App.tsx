@@ -41,7 +41,7 @@ export default function App() {
           <Header user={adminUser} />
           <main className="flex-1 overflow-y-auto" style={{ background: '#f0f8f5' }}>
             <Routes>
-              <Route path="/"             element={<Overview />} />
+              <Route path="/" element={<Overview reservations={reservations} />} />
               <Route path="/demand"       element={<DemandAnalysis />} />
               <Route path="/reservations" element={<Reservations reservations={reservations} />} />
               <Route path="/map"          element={<MapView />} />
