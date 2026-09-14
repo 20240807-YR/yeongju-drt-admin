@@ -41,9 +41,9 @@ export default function Login({ onLogin }: LoginProps) {
             <Bus size={28} className="text-white" />
           </div>
           <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">영주 관광 DRT</h1>
-          <p className="text-sm font-semibold text-gray-600 mt-2">관리자 대시보드 시스템</p>
+          <p className="text-sm font-semibold text-gray-600 mt-2">운영 현황 대시보드</p>
           <p className="text-xs leading-5 text-gray-500 mt-7 max-w-[250px]">
-            안전하고 편리한 관광 모빌리티 서비스 두루온을 위한 통합 관리 플랫폼입니다.
+            영주 관광 DRT 운영 데이터를 통해 정책 의사결정을 지원하는 대시보드입니다.
           </p>
         </div>
 
