@@ -204,7 +204,7 @@ function SidePanel({ selectedId, onClose }: {
           </div>
 
           <p className="text-xs text-gray-300 text-center pt-2">
-            마커를 클릭하면 상세 정보를 확인할 수 있습니다
+            마커를 클릭하면 상세 정보를 확인할 수 있어요.
           </p>
         </div>
       </div>
