@@ -52,7 +52,7 @@ export default function Settings() {
           </div>
           <div>
             <h2 className="text-lg font-extrabold text-gray-900">운영 설정</h2>
-            <p className="text-xs text-gray-400 mt-0.5">배차 노선 및 운행 정책을 관리합니다.</p>
+            <p className="text-xs text-gray-400 mt-0.5">노선과 운행 정책을 관리할 수 있어요.</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -70,7 +70,7 @@ export default function Settings() {
 
       {savedAt && (
         <div className="rounded-xl bg-menthe/10 border border-menthe/20 px-4 py-3 text-xs font-semibold text-menthe">
-          {savedAt} 기준 운영 설정을 임시 저장했습니다.
+          {savedAt} 기준으로 설정한 내용을 임시 저장했어요.
         </div>
       )}
 
@@ -84,7 +84,7 @@ export default function Settings() {
           <div className="rounded-xl bg-blue-50 border border-blue-100 p-4 mb-5">
             <p className="text-xs font-bold text-blue-700 mb-1">운영 기준 안내</p>
             <p className="text-xs text-blue-500 leading-5">
-              관광 성수기와 주말 수요에 따라 시간대별 배차 간격을 조정합니다.
+              관광철이나 주말처럼 사람이 몰릴 때는 배차 간격을 조절해요.
             </p>
           </div>
 
@@ -109,7 +109,7 @@ export default function Settings() {
           </div>
 
           <p className="text-xs text-gray-400 mb-4">
-            운영하는 노선을 선택하고 비활성 노선을 대기 상태로 전환할 수 있습니다.
+            운영할 노선을 선택하고, 비활성 노선을 대기 상태로 전환할 수 있어요.
           </p>
 
           <div className="space-y-5">
