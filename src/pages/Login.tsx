@@ -119,9 +119,7 @@ export default function Login({ onLogin }: LoginProps) {
             </button>
           </form>
 
-          <p className="text-[11px] text-gray-300 text-center mt-8">
-            © 2024 Yeongju City. All rights reserved.
-          </p>
+
         </div>
       </section>
     </main>
