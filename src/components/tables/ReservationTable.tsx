@@ -30,7 +30,7 @@ export default function ReservationTable({ limit, showFilter = true, data = rese
 
   const statuses: string[] = ['전체', '예약', '운행중', '완료', '대기', '취소']
 
-  const filtered = data
+  const filtered = [...data]
     .filter((r) => filter === '전체' || r.status === filter)
     .filter((r) =>
       search === '' ||

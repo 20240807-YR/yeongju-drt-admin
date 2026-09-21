@@ -1,20 +1,33 @@
 import { FormEvent, useState } from 'react'
 import { Lock, User, Bus, Eye, EyeOff } from 'lucide-react'
-import { signInWithPassword, type AdminUser } from '../services/auth'
+import { signInDemoAdmin, signInWithPassword, type AdminUser } from '../services/auth'
 
 type LoginProps = {
   onLogin: (user: AdminUser) => void
 }
 
+function getRememberedLoginId() {
+  try { return localStorage.getItem('yeongju-drt-admin-login-id') ?? 'admin' } catch { return 'admin' }
+}
+
+function rememberLoginId(value: string) {
+  try { localStorage.setItem('yeongju-drt-admin-login-id', value) } catch { /* storage is unavailable */ }
+}
+
+function forgetLoginId() {
+  try { localStorage.removeItem('yeongju-drt-admin-login-id') } catch { /* storage is unavailable */ }
+}
+
 export default function Login({ onLogin }: LoginProps) {
   const [loginId, setLoginId] = useState(
-    () => localStorage.getItem('yeongju-drt-admin-login-id') ?? 'admin',
+    getRememberedLoginId,
   )
   const [password, setPassword] = useState('demo1234')
   const [remember, setRemember] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [showDemoFallback, setShowDemoFallback] = useState(false)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -23,14 +36,20 @@ export default function Login({ onLogin }: LoginProps) {
 
     try {
       const user = await signInWithPassword(loginId, password)
-      if (remember) localStorage.setItem('yeongju-drt-admin-login-id', loginId)
-      if (!remember) localStorage.removeItem('yeongju-drt-admin-login-id')
+      if (remember) rememberLoginId(loginId.trim())
+      if (!remember) forgetLoginId()
       onLogin(user)
     } catch (e) {
-      setError(e instanceof Error ? e.message : '로그인에 실패했습니다.')
+      const message = e instanceof Error ? e.message : '로그인에 실패했습니다.'
+      setError(message)
+      setShowDemoFallback(import.meta.env.DEV && /연결|응답|네트워크/.test(message))
     } finally {
       setSubmitting(false)
     }
+  }
+
+  const handleDemoFallback = () => {
+    onLogin(signInDemoAdmin())
   }
 
   return (
@@ -117,6 +136,15 @@ export default function Login({ onLogin }: LoginProps) {
             >
               {submitting ? '로그인 중...' : '로그인'}
             </button>
+            {showDemoFallback && (
+              <button
+                type="button"
+                onClick={handleDemoFallback}
+                className="w-full h-10 rounded-xl border border-menthe text-menthe text-sm font-semibold hover:bg-menthe/5 transition"
+              >
+                연결 없이 개발용 화면 열기
+              </button>
+            )}
           </form>
 
           <p className="text-[11px] text-gray-300 text-center mt-8">
